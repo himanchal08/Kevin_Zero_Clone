@@ -1,0 +1,7 @@
+.hover:text-[#324ff4] {
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .hover:text-[#324ff4]:hover {
+    color: #324ff4;
+  }
