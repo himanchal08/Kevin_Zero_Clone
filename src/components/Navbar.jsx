@@ -21,7 +21,7 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="fixed top-0 right-0 left-0 bottom-0 z-99">
+    <div className="fixed top-0 right-0 left-0 bottom-0 z-[99]">
       <div className="bg-[#ffffff] fixed top-[1.2rem] left-[50%] right-auto h-[3.6rem] rounded-[12rem] translate-x-[-50%] whitespace-nowrap text-[#5f5f5f] font-medium text-sm">
         <div className="grid items-center justify-around grid-flow-col h-full gap-10">
           <div className="flex h-full items-center px-[10px]">
