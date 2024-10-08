@@ -14,13 +14,13 @@ const Section2 = () => {
     gsap.registerPlugin(ScrollTrigger);
 
     gsap.to(textRef.current, {
-      fontSize: "100px",
+      fontSize: "80px",
       opacity: 1,
       scrollTrigger: {
-        trigger: sectionRef.current,
+        trigger: sectionRef.current, 
         start: "top 0%",             
-        end: "+=100%",                
-        scrub: 2,                     
+        end: "+= 100%",                
+        scrub: 1,                     
         pin: true,                   
         // markers: true,               
       },
@@ -28,6 +28,7 @@ const Section2 = () => {
 
     gsap.to("#page2", {
       opacity: 0, // Fade out to 0
+      // backgroundColor: "transparent",
       zIndex: "0",
       scrollTrigger: {
         trigger: sectionRef.current,
@@ -35,22 +36,23 @@ const Section2 = () => {
         end: "bottom top", 
         scrub: 4, 
         // markers: true,
-        pin: true,
+        pin: true
       },
     });
-
-    // Opacity transition based on scroll for #canvas-Container
-    gsap.to("#canvas-Container", {
-      opacity: 0, // Fade out to 0
+    gsap.to("#canvas-Container",{
+      opacity: 1,
       scrollTrigger: {
         trigger: "#canvas-Container",
         start: "top top",
-        end: "bottom top", 
-        scrub: 1,  // Smooth animation based on scroll
-        // markers: true,  // Use markers for debugging if needed
+        end: "bottom top", // End the animation when the bottom of page2 hits the top of the viewport
+        scrub: 5, // Smoothly animate based on scroll position
+        // markers: true,
+        // pin: true
       },
-    });
+
+    })
   }, []);
+
 
   useEffect(() => {
     const canvas = document.querySelector("#canvas");
@@ -75,6 +77,7 @@ const Section2 = () => {
           if (imagesLoaded === frames.maxIndex) {
             loadImage(frames.currentIndex);
             startAnimation();
+            // Use the loaded images here
           }
         };
       }
@@ -84,7 +87,7 @@ const Section2 = () => {
       if (index >= 0 && index <= frames.maxIndex) {
         const img = images[index];
         canvas.width = window.innerWidth;
-        canvas.height = document.querySelector('.parent').clientHeight;
+        canvas.height = document.querySelector('.parent').clientHeight; // set to the height of the parent element
 
         const scaleX = canvas.width / img.width;
         const scaleY = canvas.height / img.height;
@@ -93,7 +96,7 @@ const Section2 = () => {
         const newHeight = img.height * scaleY;
 
         const offsetX = (canvas.width - newWidth) / 2;
-        const offsetY = (canvas.height - newHeight) / 2;
+        const offsetY = (canvas.height - newHeight) / 2; // fix typo
 
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.imageSmoothingEnabled = true;
@@ -115,11 +118,13 @@ const Section2 = () => {
         const newIndex = Math.floor(progress * frames.maxIndex);
         loadImage(newIndex);
 
-        // Only update the percentage after 10 frames have been scrolled
-        if (newIndex >= 0) {
-          const newPercentage = Math.min(Math.floor(progress * 100), 100);
+         // Only update the percentage after 10 frames have been scrolled
+         if (newIndex >= 0) {
+          const newPercentage = Math.min(Math.floor(progress * 100), 100); // Cap at 80%
           setPercentage(newPercentage);
         }
+        
+        
       });
     }
 
@@ -128,33 +133,31 @@ const Section2 = () => {
 
   return (
     <>
-      <div
-        className="absolute z-[3] bg-[#0A0A0A] flex justify-center items-center w-full h-[120vh]"
-        id="page2"
-        ref={sectionRef}
-      >
-        <div className="flex justify-center items-center">
-          <h2 className="text-white text-[30px]" id="text" ref={textRef}>
-            Say Goodbye to Pa$$word
-          </h2>
-        </div>
+    <div
+      className="absolute z-[3] bg-[#0A0A0A] flex justify-center items-center w-full h-[100vh]"
+      id="page2"
+      ref={sectionRef}
+    >
+      <div className="flex justify-center items-center">
+        <h2 className="text-white text-[30px]" id="text" ref={textRef}>
+          Say Goodbye to Pa$$word
+        </h2>
       </div>
+    </div>
 
-      <div>
-        <div className="w-full h-full bg-zinc-900 opacity-0" id="canvas-Container">
-          <div className="parent relative w-full h-[900vh]">
-            <div className="w-full sticky top-0 h-screen">
-              <canvas className="w-full h-screen" id="canvas"></canvas>
-              <div className="absolute top-[35%] left-[46%] z-[2] w-1/2 text-white text-[6rem]" ref={percentageRef}>
-                {percentage}% {/* Display percentage */}
-                <p className="text-[1.4rem] text-center w-[37%] -left-10 relative tracking-wide text-[#7D797B] font-medium">
-                  of breaches are caused by stolen credentials
-                </p>
-              </div>
-            </div>
+    <div>
+    <div className="w-full h-full bg-zinc-900 opacity-0" id="canvas-Container">
+        <div className="parent relative w-full h-[900vh]">
+          <div className="w-full sticky top-0 h-screen">
+            <canvas className="w-full h-screen" id="canvas"></canvas>
+            <div className="absolute top-[35%] left-[46%] z-[2] w-1/2 text-white text-[6rem]"  ref={percentageRef}>
+            {percentage}% {/* Display percentage */}
+            <p className="text-[1.4rem] text-center w-[37%] -left-10 relative tracking-wide text-[#7D797B] font-medium">of breaches are caused by stolen credentials</p>
+          </div>
           </div>
         </div>
       </div>
+    </div>
     </>
   );
 };
