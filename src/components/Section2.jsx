@@ -17,9 +17,9 @@ const Section2 = () => {
       fontSize: "100px",
       opacity: 1,
       scrollTrigger: {
-        trigger: sectionRef.current, 
+        trigger: sectionRef.current,
         start: "top 0%",             
-        end: "+= 100%",                
+        end: "+=100%",                
         scrub: 2,                     
         pin: true,                   
         // markers: true,               
@@ -28,38 +28,36 @@ const Section2 = () => {
 
     gsap.to("#page2", {
       opacity: 0, // Fade out to 0
-      // backgroundColor: "transparent",
       zIndex: "0",
       scrollTrigger: {
         trigger: sectionRef.current,
         start: "top top",
-        end: "bottom top", // End the animation when the bottom of page2 hits the top of the viewport
-        scrub: 2, // Smoothly animate based on scroll position
+        end: "bottom top", 
+        scrub: 4, 
         // markers: true,
-        pin: true
+        pin: true,
       },
     });
-    gsap.to("#canvas-Container",{
-      opacity: 1,
+
+    // Opacity transition based on scroll for #canvas-Container
+    gsap.to("#canvas-Container", {
+      opacity: 0, // Fade out to 0
       scrollTrigger: {
         trigger: "#canvas-Container",
         start: "top top",
-        end: "bottom top", // End the animation when the bottom of page2 hits the top of the viewport
-        scrub: 2, // Smoothly animate based on scroll position
-        // markers: true,
-        pin: true
+        end: "bottom top", 
+        scrub: 1,  // Smooth animation based on scroll
+        // markers: true,  // Use markers for debugging if needed
       },
-
-    })
+    });
   }, []);
-
 
   useEffect(() => {
     const canvas = document.querySelector("#canvas");
     const context = canvas.getContext("2d");
     const frames = {
       currentIndex: 0,
-      maxIndex: 600,
+      maxIndex: 601,
     };
 
     let imagesLoaded = 0;
@@ -77,7 +75,6 @@ const Section2 = () => {
           if (imagesLoaded === frames.maxIndex) {
             loadImage(frames.currentIndex);
             startAnimation();
-            // Use the loaded images here
           }
         };
       }
@@ -87,7 +84,7 @@ const Section2 = () => {
       if (index >= 0 && index <= frames.maxIndex) {
         const img = images[index];
         canvas.width = window.innerWidth;
-        canvas.height = document.querySelector('.parent').clientHeight; // set to the height of the parent element
+        canvas.height = document.querySelector('.parent').clientHeight;
 
         const scaleX = canvas.width / img.width;
         const scaleY = canvas.height / img.height;
@@ -96,7 +93,7 @@ const Section2 = () => {
         const newHeight = img.height * scaleY;
 
         const offsetX = (canvas.width - newWidth) / 2;
-        const offsetY = (canvas.height - newHeight) / 2; // fix typo
+        const offsetY = (canvas.height - newHeight) / 2;
 
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.imageSmoothingEnabled = true;
@@ -118,12 +115,11 @@ const Section2 = () => {
         const newIndex = Math.floor(progress * frames.maxIndex);
         loadImage(newIndex);
 
-         // Only update the percentage after 10 frames have been scrolled
-         if (newIndex >= 0) {
-          const newPercentage = Math.min(Math.floor(progress * 100), 100); // Cap at 80%
+        // Only update the percentage after 10 frames have been scrolled
+        if (newIndex >= 0) {
+          const newPercentage = Math.min(Math.floor(progress * 100), 100);
           setPercentage(newPercentage);
         }
-          // Update the percentage state
       });
     }
 
@@ -132,31 +128,33 @@ const Section2 = () => {
 
   return (
     <>
-    <div
-      className="absolute z-[3] bg-[#0A0A0A] flex justify-center items-center w-full h-[120vh]"
-      id="page2"
-      ref={sectionRef}
-    >
-      <div className="flex justify-center items-center">
-        <h2 className="text-white text-[30px]" id="text" ref={textRef}>
-          Say Goodbye to Pa$$word
-        </h2>
-      </div>
-    </div>
-
-    <div>
-    <div className="w-full h-full bg-zinc-900 opacity-0" id="canvas-Container">
-        <div className="parent relative w-full h-[1000vh]">
-          <div className="w-full sticky top-0 h-screen">
-            <canvas className="w-full h-screen" id="canvas"></canvas>
-            <div className="absolute top-[40%] left-[46%] z-[2] w-1/2 text-white text-[7rem]"  ref={percentageRef}>
-            {percentage}% {/* Display percentage */}
-          </div>
-          </div>
-          
+      <div
+        className="absolute z-[3] bg-[#0A0A0A] flex justify-center items-center w-full h-[120vh]"
+        id="page2"
+        ref={sectionRef}
+      >
+        <div className="flex justify-center items-center">
+          <h2 className="text-white text-[30px]" id="text" ref={textRef}>
+            Say Goodbye to Pa$$word
+          </h2>
         </div>
       </div>
-    </div>
+
+      <div>
+        <div className="w-full h-full bg-zinc-900 opacity-0" id="canvas-Container">
+          <div className="parent relative w-full h-[900vh]">
+            <div className="w-full sticky top-0 h-screen">
+              <canvas className="w-full h-screen" id="canvas"></canvas>
+              <div className="absolute top-[35%] left-[46%] z-[2] w-1/2 text-white text-[6rem]" ref={percentageRef}>
+                {percentage}% {/* Display percentage */}
+                <p className="text-[1.4rem] text-center w-[37%] -left-10 relative tracking-wide text-[#7D797B] font-medium">
+                  of breaches are caused by stolen credentials
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
