@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
+html,body{
   background: black;
+  scroll-behavior: smooth;
 }
